@@ -9,7 +9,11 @@ OBJ := uart_drv.o uart_modem_state.o uart_unix.o uart_buf.o uart_options.o uart_
 
 
 $(PRIVDIR)/uart_drv.so : $(OBJ)
-	$(CC) -shared -fpic $(LDFLAGS) ../../../erlang-dthread-*/git/c_src/*.o -o $@ $^
+	$(CC) -shared -fpic $(LDFLAGS) \
+	../../../erlang-dthread-*/git/c_src/dthread.o \
+	../../../erlang-dthread-*/git/c_src/dlib.o \
+	../../../erlang-dthread-*/git/c_src/dterm.o \
+	-o $@ $^
 
 clean:
 	$(RM) -f $(PRIVDIR)/uart_drv.so $(OBJ)
