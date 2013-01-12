@@ -13,7 +13,7 @@ $(PRIVDIR)/uart_drv.so : $(OBJ)
 	../../../erlang-dthread-*/git/c_src/dthread.o \
 	../../../erlang-dthread-*/git/c_src/dlib.o \
 	../../../erlang-dthread-*/git/c_src/dterm.o \
-	o $@ $^
+	-o $@ $^
 
 clean:
 	$(RM) -f $(PRIVDIR)/uart_drv.so $(OBJ)
