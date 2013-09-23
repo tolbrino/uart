@@ -248,7 +248,7 @@ static ErlDrvData uart_drv_start(ErlDrvPort port, char* command)
 	    ctx->other = dthread_start(port, uart_win32_main, &ctx->self, 4096);
 	    DEBUGF("uart_drv: win32 thread = %p", ctx->other);
 	}
-#else 
+#else
 	if ((*command == '\0') || (strcmp(command, "unix") == 0)) {
 	    ctx->other = dthread_start(port, uart_unix_main, &ctx->self, 4096);
 	    DEBUGF("uart_drv: unix thread = %p", ctx->other);
@@ -271,7 +271,7 @@ static ErlDrvData uart_drv_start(ErlDrvPort port, char* command)
 static void uart_drv_stop(ErlDrvData d)
 {
     drv_ctx_t* ctx = (drv_ctx_t*) d;
-    void* value;    
+    void* value;
 
     DEBUGF("uart_drv_stop: called");
     dthread_stop(ctx->other, &ctx->self, &value);
@@ -307,7 +307,7 @@ static char* format_command(int cmd)
     }
 }
 
-static ErlDrvSSizeT uart_drv_ctl(ErlDrvData d, 
+static ErlDrvSSizeT uart_drv_ctl(ErlDrvData d,
 				 unsigned int cmd, char* buf, ErlDrvSizeT len,
 				 char** rbuf, ErlDrvSizeT rsize)
 {
@@ -318,7 +318,7 @@ static ErlDrvSSizeT uart_drv_ctl(ErlDrvData d,
 
     ctx->self.caller = driver_caller(ctx->self.port);
     dthread_control(ctx->other, &ctx->self, cmd, buf, len);
-    
+
     put_uint32((unsigned char*)ref_buf, (uint32_t) ctx->self.ref);
     return ctl_reply(UART_OK, ref_buf, sizeof(ref_buf), rbuf, rsize);
 }
@@ -345,7 +345,7 @@ static void uart_drv_ready_input(ErlDrvData d, ErlDrvEvent e)
     if (ctx->self.iq_signal[0] == e) { // got input !
 	dmessage_t* mp;
 
-	DEBUGF("uart_drv: ready_input handle=%d", 
+	DEBUGF("uart_drv: ready_input handle=%d",
 	       DTHREAD_EVENT(ctx->self.iq_signal[0]));
 
 	if ((mp = dthread_recv(&ctx->self, NULL)) == NULL) {
@@ -357,7 +357,7 @@ static void uart_drv_ready_input(ErlDrvData d, ErlDrvEvent e)
 	switch(mp->cmd) {
 	case DTHREAD_OUTPUT_TERM:
 	    DEBUGF("uart_drv: ready_input (OUTPUT_TERM)");
-	    DOUTPUT_TERM(&(ctx->self), 
+	    DOUTPUT_TERM(&(ctx->self),
 			 (ErlDrvTermData*) mp->buffer,
 			 mp->used / sizeof(ErlDrvTermData));
 	    break;
@@ -367,7 +367,7 @@ static void uart_drv_ready_input(ErlDrvData d, ErlDrvEvent e)
 	    //   mp->used / sizeof(ErlDrvTermData));
 	    DSEND_TERM(&(ctx->self), mp->to, /* orignal from ! */
 		       (ErlDrvTermData*) mp->buffer,
-		       mp->used / sizeof(ErlDrvTermData)); 
+		       mp->used / sizeof(ErlDrvTermData));
 	    break;
 	case DTHREAD_OUTPUT:
 	    DEBUGF("uart_drv: ready_input (OUTPUT)");
